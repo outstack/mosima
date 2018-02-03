@@ -1,6 +1,6 @@
 {
   "name": "@outstack/mosima",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Modern Simplified Make Alternative",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,8 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/outstack/mosima.git"
+  },
+  "dependencies": {
   },
   "author": "",
   "license": "ISC"

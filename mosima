@@ -6,6 +6,10 @@ BUILD_PKG_NAME=mosima-build-dir
 
 init () {
     if [ ! -d "$BUILD_DIR" ]; then
+
+        echo "Initialising task directory $BUILD_DIR"
+        echo ""
+
         mkdir $BUILD_DIR
         cat > $BUILD_DIR/package.json <<EOL
 {
@@ -13,18 +17,59 @@ init () {
   "version": "1.0.0",
   "description": "This package.json includes the dependencies for your tasks",
   "author": "",
+  "scripts": {
+    "task": "./node_modules/.bin/babel-node ./run-task.js"
+  },
   "dependencies": {
-    "@outstack/mosima": "0.0.1",
+    "@outstack/mosima": "file:../../mosima",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1"
   },
   "license": "UNLICENSED"
 }
 EOL
+
+        cat > $BUILD_DIR/run-task.js <<EOL
+import main from './main.js';
+
+let command = process.argv[2];
+
+main[command]();
+EOL
+
+        cat > $BUILD_DIR/.babelrc <<EOL
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "node": "current"
+      }
+    }]
+  ]
+}
+EOL
+
+        cat > $BUILD_DIR/main.js <<EOL
+import { exec } from 'child_process'
+export default {
+    subTask: function() {
+        console.log('This is an example task, called from "example"');
+    },
+    example: function() {
+        console.log('This is an example task, inspect the code at .mosima/main.js');
+        this.subTask();
+    }
+}
+EOL
+
     fi
     pushd .mosima > /dev/null && \
-      npm install --save ../../mosima && \
+      npm install && \
     popd > /dev/null
+
+    echo ""
+    echo "Finished initialising, try running mosima example"
+    echo ""
 }
 
 run_task () {
