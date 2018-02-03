@@ -1,0 +1,41 @@
+#!/bin/bash
+set -e
+
+BUILD_DIR=.mosima
+BUILD_PKG_NAME=mosima-build-dir
+
+init () {
+    if [ ! -d "$BUILD_DIR" ]; then
+        mkdir $BUILD_DIR
+        cat > $BUILD_DIR/package.json <<EOL
+{
+  "name": "$BUILD_PKG_NAME",
+  "version": "1.0.0",
+  "description": "This package.json includes the dependencies for your tasks",
+  "author": "",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
+  },
+  "license": "UNLICENSED"
+}
+EOL
+    fi
+    pushd .mosima > /dev/null && \
+      npm install --save ../../mosima \
+    popd > /dev/null
+}
+
+run_task () {
+    pushd .mosima > /dev/null && \
+      npm run task -- $1 && \
+    popd > /dev/null
+}
+
+if [ "$@" == "init" ]; then
+    init
+    exit 0
+fi
+
+run_task $@
+exit 0
