@@ -21,7 +21,6 @@ init () {
     "task": "./node_modules/.bin/babel-node ./run-task.js"
   },
   "dependencies": {
-    "@outstack/mosima": "file:../../mosima",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1"
   },
@@ -61,6 +60,8 @@ export default {
     }
 }
 EOL
+
+    pushd .mosima && npm install --save @outstack/mosima && popd
 
     fi
     pushd .mosima > /dev/null && \
