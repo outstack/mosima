@@ -30,6 +30,8 @@ EOL
 
         cat > $BUILD_DIR/run-task.js <<EOL
 import main from './main.js';
+import process from 'process';
+process.chdir('..');
 
 let command = process.argv[2];
 
